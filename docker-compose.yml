@@ -1,0 +1,33 @@
+version: '3.3'
+
+services:
+  #MongoDB services
+  mongo_db:
+    container_name: db_container 
+    image: mongo:latest
+    restart: always
+    ports:
+        #-local:container
+      - 2717:27017
+    volumes: 
+      - mongo_db:/data/db
+
+  #Node js api service
+  backend_app: 
+    build: .
+    ports: 
+      - 80:3000
+    links: 
+      - mongo_db
+    volumes:
+      - .:/app/src/
+    environment: 
+      PORT: 3000
+      # MongoDB_URI: mongodb://mongo_db:27017
+      HOST_NAME: mongo_db
+      DB_PORT: 27017
+      NAME: Mahatab
+    depends_on:
+      - mongo_db
+volumes:
+  mongo_db: {}
