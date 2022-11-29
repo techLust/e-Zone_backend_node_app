@@ -31,7 +31,5 @@ app.use('/forgot/password', signInRouter);
 //**********// ADMIN //********** */ */
 app.use('/create/admin',adminRouter );
 
-//***********************// PRACTICE //************** */ */
-
 
 module.exports = app;
