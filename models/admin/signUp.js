@@ -21,7 +21,10 @@ const adminSchema = mongoose.Schema({
         type: String,
         required: 'Please select role',
     }
-},);
+},
+{
+    timestamps: true,
+});
 
 const AdminModel = mongoose.model('admin', adminSchema);
 

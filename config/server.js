@@ -11,8 +11,17 @@ const io = require('socket.io')(httpServer, {
   cors: {origin : '*'}
 });
 
+//SETTING UP PEER SERVER
+const { ExpressPeerServer } = require('peer');
+const peerServer = ExpressPeerServer(httpServer, {
+  degub:true,
+})
+app.use('/peerjs', peerServer);
+
+//ESTABLISHING SOCKET CONNECTION
+
   io.on('connection', (socket) => {
-    console.log('a user connected');
+    console.log('Client connected');
 
     //Sending message
     socket.on('message', message => {
@@ -20,10 +29,16 @@ const io = require('socket.io')(httpServer, {
         io.emit('message', `${message}`)
     });
 
+    //Join video room
+    socket.on('join-room', (roomId, userId) => {
+      socket.join(roomId);
+      socket.broadcast.to(roomId).emit('user-connected', userId);
+    });
+
     //Disconnect user
     socket.on('disconnect', () => {
-        console.log('User disconnected');
-    })
+        console.log('Client disconnected');
+    });
   });
 
 

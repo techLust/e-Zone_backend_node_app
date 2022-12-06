@@ -25,10 +25,9 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: 'Please enter password',
     },
-    // avatar: {
-    //     data: Buffer,
-    //     contentType: String,
-    // }
+    avatar: {
+        type: String,
+    }
 
 }, {
     timestamps: true,

@@ -1,10 +1,10 @@
-const userModel = require('../models/userModel');
+const userModel = require('../models/signUpUserModel');
 
 //**********// DUPLICATE EMAIL CHECKER MIDDLEWARE //*************** */ */
 
 exports.chaeckDuplicateUsernameOrEmail = (req, res, next) => {
 
-    //CHECKING EMAIL INTO DB PROVIDED BY USER
+    //CHECKING EMAIL INTO PROVIDED BY USER
     userModel.findOne({ email: req.body.email})
     .exec((err, user) => {
         if(err) return res.status(500).json({ message: err.message});
