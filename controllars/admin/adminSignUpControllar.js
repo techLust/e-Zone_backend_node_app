@@ -1,4 +1,4 @@
-const AdminModel = require('../../models/admin/signUp');
+const AdminModel = require('../../models/admin/adminSignUpModel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
@@ -9,7 +9,7 @@ exports.createAdmin = async (req, res) => {
     try {
         const { firstName, lastName, email, password, role } = req.body;
 
-        if (!(firstName && lastName && email && password && role)) { res.status(500).json({ message: 'Enter valid details' }); };
+        if (!(firstName && lastName && email && password && role)) return res.status(401).json({ message: 'Enter valid details' });
 
         const salt = await bcrypt.genSalt(saltRounds);
         const hashedPassword = await bcrypt.hash(password, salt);
@@ -29,5 +29,5 @@ exports.createAdmin = async (req, res) => {
             token: token,
         });
     }
-    catch (error) { res.status(500).json({ message: error.message, }); };
+    catch (error) { res.status(401).json({ message: error.message, }); }
 };

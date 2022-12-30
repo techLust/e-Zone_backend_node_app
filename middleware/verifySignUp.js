@@ -1,4 +1,4 @@
-const userModel = require('../models/signUpUserModel');
+const userModel = require('../models/user/signUpUser');
 
 //**********// DUPLICATE EMAIL CHECKER MIDDLEWARE //*************** */ */
 

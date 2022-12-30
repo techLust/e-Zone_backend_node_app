@@ -1,37 +1,52 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const path = require('path')
-const { v4: uuidv4 } = require('uuid')
-const bodyParser = require('body-parser');
+const path = require('path');
+const { v4: uuidv4 } = require('uuid');
 
 
-const userRouter = require('./routers/userRouter');
-const signInRouter = require('./routers/signInRouer');
+//"express.json()" allows us to accept the data in json format from body.
+app.use(express.json());
+// Allows restricted resources on a webpage to be requested from another domain outside the domain. 
+app.use(cors());
+// Parses incoming request with url encoded payloads based on body parser.
+app.use(express.urlencoded({ extended: false }));
 
+
+//ADMIN ROUTER
+const adminRouter = require('./routers/admin/adminSignUpRouter');
+
+
+//VENDOR ROUTER
+const vendorRouter = require('./routers/vendor/vendorSignUpRouter');
+
+
+//USER ROUTER
+const userRouter = require('./routers/user/userRouter');
+const signInRouter = require('./routers/user/signInRouer');
+
+
+//MIDDLEWARE
 const authJWT = require('./middleware/authJWT');
 const verifySignUp = require('./middleware/verifySignUp');
 const { uploadAvatar } = require('./middleware/uploadImage')
 
-const adminRouter = require('./routers/admin/signUp');
 
-//"express.json()" allows us to accept the data in json format from body.
-app.use(express.json());
-// app.use(express.urlencoded({extended:true}))
-app.use(cors());
-
-app.use(bodyParser.json());
-app.use(express.urlencoded({ extended: false }));
-// app.use(bodyParser.urlencoded({ extended: true }));
-
-//SETTING UP ejs
+//AUDIO CHAT
+//setting up ejs
 app.set('view engine', 'ejs');
-app.use(express.static('uploads'))
+app.use(express.static('uploads'));
+
+// app.get('/:room', (req, res) => {
+//   res.render('room', { roomId: req.params.room });
+// });
+
 
 //Allow all origin
-app.use(cors({
-  origin: "*"
-}));
+// app.use(cors({
+//   origin: "*"
+// }));
+
 
 //VIDEO CHAT
 app.get('/video', (req, res) => {
@@ -40,11 +55,30 @@ app.get('/video', (req, res) => {
   res.redirect(`/${uuidv4()}`);
 });
 
-app.get('/:room', (req, res) => {
-  res.render('room', { roomId: req.params.room });
-});
+
+//Test route for deployment
+// app.get('/', (req, res) => {
+//   res.send('Backend cluster working well...')
+// })
 
 
+//**********// ADMIN ROUTER //********** */
+app.use('/create/admin', adminRouter);
+app.use('/delete/admin', adminRouter);
+app.use('/update/admin', adminRouter);
+app.use('/', adminRouter);
+app.use('/', adminRouter);
+
+
+
+//**********// VENDOR ROUTER //************** */
+app.use('/vendor/signup', vendorRouter);
+app.use('/', vendorRouter);
+app.use('/delete/vendor', vendorRouter);
+app.use('/', vendorRouter);
+app.use('/update/vendor', vendorRouter);
+
+//**********// USER ROUTER //************ */
 app.use('/create/user',
   verifySignUp.chaeckDuplicateUsernameOrEmail,
   uploadAvatar.single("upload_file"),
@@ -55,10 +89,6 @@ app.use('/delete/user', userRouter);
 app.use('/signin/user', signInRouter);
 app.use('/', signInRouter);
 app.use('/forgot/password', signInRouter);
-
-//**********// ADMIN //********** */ */
-app.use('/create/admin', adminRouter);
-app.use('/',adminRouter);
 
 
 module.exports = app;

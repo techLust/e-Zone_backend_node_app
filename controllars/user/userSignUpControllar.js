@@ -1,5 +1,5 @@
 require('dotenv').config();
-const UserModel = require('../models/signUpUserModel');
+const UserModel = require('../../models/user/signUpUser');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
@@ -12,9 +12,7 @@ const secretKey = process.env.SECRET_ACCESS_KEY;
 exports.createUsers = async (req, res) => {
     try {
         //CHECKING DATA
-        console.log(req.body)
-        console.log(req.file)
-        const { firstName, lastName, email, password} = req.body;
+        const { firstName, lastName, email, password } = req.body;
 
         if (!(firstName && lastName && email && password)) {
             return res.send("Enter valid details");
@@ -26,7 +24,7 @@ exports.createUsers = async (req, res) => {
 
         // const path  = `http://localhost:3000//${req.file.path.split('/')[1]}`
 
-        const userData = new UserModel({ firstName, lastName, email, password: hashedPassword});
+        const userData = new UserModel({ firstName, lastName, email, password: hashedPassword });
 
         //CREATING JWT TOKEN
         const token = jwt.sign(

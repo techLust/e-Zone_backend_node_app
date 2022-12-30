@@ -22,7 +22,7 @@ RUN npm i
 # Bundle app source
 COPY . .
 
-ENV MONGO_URI=mongodb://172.17.0.1:27017/angular-crud
+ENV MONGO_URI=mongodb://172.17.0.1:27017/e-com-db 
 
 # The EXPOSE instruction defines a network port that the docker container should listen on when run
 EXPOSE 3000
