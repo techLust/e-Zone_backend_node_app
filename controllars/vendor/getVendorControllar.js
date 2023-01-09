@@ -12,4 +12,16 @@ exports.getVendorData = async (req, res) => {
             message: 'Something went wrong'
         })
     }
+};
+
+// Find vendor by ID
+exports.getVendorDetailsById = async (req, res) => {
+    try{
+        const vendorId = req.params.id;
+        const vendorDetails = await VendorSignUpModel.findById(vendorId)
+        return res.json({status: 'Success', data: vendorDetails})
+    }
+    catch(error){
+        res.status(401).json({message: 'Vendor details not found'})
+    }
 }

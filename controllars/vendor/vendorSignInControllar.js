@@ -16,7 +16,8 @@ exports.vendorSignIn = async(req, res) => {
         const token = jwt.sign({email: vendor.email},process.env.SECRET_ACCESS_KEY)
         res.status(200).json({
             status: 'login success',
-            token: token
+            data: vendor,
+            token: token,
         });
 
     }catch(error){

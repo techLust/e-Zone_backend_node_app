@@ -10,5 +10,6 @@ router.route('/vendor/signin').post(vendorSignInControllar.vendorSignIn);
 router.route('/:id').delete(deleteVendorControllar.deleteVendor);
 router.route('/get/vendor').get(getVendorControllar.getVendorData);
 router.route('/:id').patch(updateVendorControllar.updateVendorData);
+router.route('/:id').get(getVendorControllar.getVendorDetailsById);
 
 module.exports = router;

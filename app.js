@@ -3,7 +3,8 @@ const cors = require('cors');
 const app = express();
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
-
+const session = require('express-session');
+const passport = require('passport')
 
 //"express.json()" allows us to accept the data in json format from body.
 app.use(express.json());
@@ -12,6 +13,13 @@ app.use(cors());
 // Parses incoming request with url encoded payloads based on body parser.
 app.use(express.urlencoded({ extended: false }));
 
+//SESSION
+app.use(session({secret: 'keyboard'})); //take secret form environment variable
+app.use(passport.initialize());
+app.use(passport.session());
+
+//STATIC FILES
+app.use(express.static('uploads'));
 
 //ADMIN ROUTER
 const adminRouter = require('./routers/admin/adminSignUpRouter');
@@ -29,13 +37,13 @@ const signInRouter = require('./routers/user/signInRouer');
 //MIDDLEWARE
 const authJWT = require('./middleware/authJWT');
 const verifySignUp = require('./middleware/verifySignUp');
-const { uploadAvatar } = require('./middleware/uploadImage')
+const { uploadAvatar } = require('./middleware/uploadImage');
 
 
 //AUDIO CHAT
 //setting up ejs
 app.set('view engine', 'ejs');
-app.use(express.static('uploads'));
+
 
 // app.get('/:room', (req, res) => {
 //   res.render('room', { roomId: req.params.room });
@@ -56,10 +64,35 @@ app.get('/video', (req, res) => {
 });
 
 
-//Test route for deployment
-// app.get('/', (req, res) => {
-//   res.send('Backend cluster working well...')
-// })
+// Test route for google login 
+const isLoggedIn = (req, res, next) => {
+  req.user ? next() : res.send(401);
+}
+
+app.get('/', (req, res) => {
+  res.send('<a href=""auth/google>Authenticate user</a>')
+})
+
+app.get('/google/authenticate', 
+  passport.authenticate('google', 
+    {
+      successRedirect: '/login/success',
+      failureRedirect: '/login/failure',
+  }
+  )
+)
+
+app.get('/login/failure', (req, res) => {
+  res.send('Something went wrong')
+})
+
+app.get('/login/success', isLoggedIn, (req, res) => {
+  res.send('Hello')
+})
+
+app.get('/logout', (req, res) => {
+  res.send('Goodbye');
+})
 
 
 //**********// ADMIN ROUTER //********** */
@@ -77,6 +110,7 @@ app.use('/', vendorRouter);
 app.use('/delete/vendor', vendorRouter);
 app.use('/', vendorRouter);
 app.use('/update/vendor', vendorRouter);
+app.use('/vendor', vendorRouter);
 
 //**********// USER ROUTER //************ */
 app.use('/create/user',
@@ -89,6 +123,7 @@ app.use('/delete/user', userRouter);
 app.use('/signin/user', signInRouter);
 app.use('/', signInRouter);
 app.use('/forgot/password', signInRouter);
+app.use('/', userRouter);
 
 
 module.exports = app;
