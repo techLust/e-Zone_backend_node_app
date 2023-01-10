@@ -122,7 +122,7 @@ app.use('/update/user', userRouter);
 app.use('/delete/user', userRouter);
 app.use('/signin/user', signInRouter);
 app.use('/', signInRouter);
-app.use('/forgot/password', signInRouter);
+// app.use('/forgot/password', signInRouter);
 app.use('/', userRouter);
 
 

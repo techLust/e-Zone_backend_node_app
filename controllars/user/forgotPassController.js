@@ -34,10 +34,10 @@ exports.forgotPassword = (req, res) => {
             forgotPassDetails.save();
 
             return res.status(200).json({
-                status: 'e-mail sent successful',
+                status: 'Check your email for OTP',
                 data: data,
             });
         }
-        else { return res.status(200).json({ status: 'Something went wrong', err}) }
+        else { return res.status(200).json({ status: 'User does not exist', err}) }
     });
 };
