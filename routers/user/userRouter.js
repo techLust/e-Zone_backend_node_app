@@ -1,5 +1,4 @@
-const express = require('express');
-const router = express.Router();
+const router = require('express').Router();
 const signUpControllar = require('../../controllars/user/userSignUpControllar');
 const getUserControllar = require('../../controllars/user/getUserControllar');
 const updateUserControllar = require('../../controllars/user/updateUserControllar');
@@ -7,14 +6,17 @@ const deleteUserControllar = require('../../controllars/user/deleteUserControlla
 const forgotPassController = require('../../controllars/user/forgotPassController')
 const validateUserOTP = require('../../controllars/user/verifyUserOTP');
 const updateUserPassControllar = require('../../controllars/user/updateUserPassController');
+const uploadUserImage = require('../../controllars/user/uploadImgController');
+const { uploadImage } = require('../../middleware/uploadImage')
 
 router.route("/")
     .post(signUpControllar.createUsers)
     .get(getUserControllar.getUser);
 
-router.route('/forgot/password').post(forgotPassController.forgotPassword)
-router.route('/verify/otp').post(validateUserOTP.checkUserOTP)
-router.route('/update/password').patch(updateUserPassControllar.updateUserPass)
+router.route('/forgot/password').post(forgotPassController.forgotPassword);
+router.route('/verify/otp').post(validateUserOTP.checkUserOTP);
+router.route('/update/password').patch(updateUserPassControllar.updateUserPass);
+router.route('/upload/image').post(uploadImage, uploadUserImage.uploadImage );
 
 router.route('/:id')
     .patch(updateUserControllar.updateUser)

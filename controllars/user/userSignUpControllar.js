@@ -2,7 +2,6 @@ require('dotenv').config();
 const UserModel = require('../../models/user/signUpUser');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const multer = require('multer');
 const saltRounds = 8;
 const secretKey = process.env.SECRET_ACCESS_KEY;
 
@@ -21,8 +20,6 @@ exports.createUsers = async (req, res) => {
         //ENCRYPTING PASSWORD
         const salt = await bcrypt.genSalt(saltRounds);
         const hashedPassword = await bcrypt.hash(password, salt);
-
-        // const path  = `http://localhost:3000//${req.file.path.split('/')[1]}`
 
         const userData = new UserModel({ firstName, lastName, email, password: hashedPassword });
 

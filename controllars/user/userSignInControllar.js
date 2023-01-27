@@ -7,6 +7,7 @@ const secretKey = process.env.SECRET_ACCESS_KEY;
 exports.signIn = async (req, res) => {
     try {
         const { email, password } = req.body;
+
         if (!email) return res.status(401).json({ message: "Email not found" });
         if (!password) return res.status(401).json({ message: "Password not found" });
 
@@ -23,9 +24,5 @@ exports.signIn = async (req, res) => {
             token: token,
             user: user,
         })
-    } catch {
-        res.status(500).json({
-            message: "Unable to sign in",
-        });
-    };
-};
+    } catch { res.status(500).json({ message: "Unable to sign in" }) };
+}

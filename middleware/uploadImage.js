@@ -1,15 +1,24 @@
 const multer = require('multer');
 
-//IMAGE UPLOAD
 const Storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads')
+        cb(null, './uploads')
     },
     filename: (req, file, cb) => {
         cb(null, file.originalname)
     },
 });
 
-exports.uploadAvatar = multer({
+const maxSize = 1 * 1000 * 1000;
+
+exports.uploadImage = multer({
     storage: Storage,
-});
+    limits: { fileSize: maxSize },
+    fileFilter: (req, file, cb) => {
+        const filetypes = /jpeg|jpg|png/;
+        const mimetypes = filetypes.test(file.mimetype);
+        const extName = filetypes.test(file.originalname.toLowerCase());
+        if (mimetypes && extName) return cb(null, true)
+        cb("Error: File upload only supports the following file types" + "- " + filetypes)
+    }
+}).single('testImg');
