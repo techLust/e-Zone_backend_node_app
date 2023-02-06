@@ -21,4 +21,4 @@ exports.uploadImage = multer({
         if (mimetypes && extName) return cb(null, true)
         cb("Error: File upload only supports the following file types" + "- " + filetypes)
     }
-}).single('testImg');
+}).single('upload');

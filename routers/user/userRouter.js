@@ -8,6 +8,7 @@ const validateUserOTP = require('../../controllars/user/verifyUserOTP');
 const updateUserPassControllar = require('../../controllars/user/updateUserPassController');
 const uploadUserImage = require('../../controllars/user/uploadImgController');
 const { uploadImage } = require('../../middleware/uploadImage')
+const { uploadImageToS3 } = require('../../controllars/user/uploadImgToS3')
 
 router.route("/")
     .post(signUpControllar.createUsers)
@@ -17,6 +18,7 @@ router.route('/forgot/password').post(forgotPassController.forgotPassword);
 router.route('/verify/otp').post(validateUserOTP.checkUserOTP);
 router.route('/update/password').patch(updateUserPassControllar.updateUserPass);
 router.route('/upload/image').post(uploadImage, uploadUserImage.uploadImage );
+router.route('/upload/image/s3').post(uploadImage,uploadImageToS3);
 
 router.route('/:id')
     .patch(updateUserControllar.updateUser)
