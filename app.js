@@ -26,7 +26,7 @@ app.use('/uploads', express.static('uploads'));
 const adminRouter = require('./routers/admin/adminSignUpRouter');
 
 //VENDOR ROUTER
-const vendorRouter = require('./routers/vendor/vendorSignUpRouter');
+const vendorRouter = require('./routers/vendor/vendorRouter');
 
 //USER ROUTER
 const userRouter = require('./routers/user/userRouter');
@@ -35,7 +35,6 @@ const signInRouter = require('./routers/user/signInRouer');
 //MIDDLEWARE
 const authJWT = require('./middleware/authJWT');
 const verifySignUp = require('./middleware/verifySignUp');
-const { uploadImage } = require('./middleware/uploadImage');
 
 //AUDIO CHAT
 //setting up ejs

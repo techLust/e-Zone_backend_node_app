@@ -12,7 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@google-cloud/firestore": "^6.4.1",
-    "aws-sdk": "^2.1309.0",
+    "aws-sdk": "^2.1316.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.1",
     "cloudinary": "^1.33.0",
@@ -34,6 +34,7 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-google-oidc": "^0.1.0",
     "peer": "^0.6.1",
+    "redis": "^4.6.4",
     "s3-proxy-stream": "^1.0.1",
     "socket.io": "^4.5.4",
     "socket.io-client": "^4.5.4",

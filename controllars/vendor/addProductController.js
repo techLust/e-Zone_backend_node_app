@@ -1,30 +1,14 @@
-const { vendorProductModel } = require('../../models/vendor/vendorProductModel');
-const fs = require('fs');
-const formidable = require('formidable');
-// const path = require('path')
+require('dotenv').config({path: '../../.env'});
+const { s3Uploader } = require('../../services/s3Uploader.services')
 
-exports.addProduct = async (req, res) => {
-    try{
-  
-        // console.log("Body", req.body);
-        // let imgPath = req.body.upload.split('\\');
-        // console.log(imgPath[1] + "/" +imgPath[2])
-
-        const { productName, productPrice, productDescription } = req.body;
-
-        const productDetails = await vendorProductModel.create({productName, productPrice, productDescription});
-        
-        return res.status(200).json({
-            status: 'Product added successfully',
-            data: productDetails,
-        })
-
+    exports.addProduct = async (req, res) => {
+        try{        
+            await s3Uploader(req.file, req.body);
+            return res.status(200).json({
+                status: 'Product added successful',
+            })
+    
+        }catch(err){
+            return res.status(500).json({status: 'Product added failed'})
+        }
     }
-    catch(error) {
-        console.log(error)
-        res.status(500).json({
-            status: 'Product add failed',
-            error: error.message
-        })
-    }
-}
