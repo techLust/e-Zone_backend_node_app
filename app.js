@@ -22,13 +22,9 @@ app.use(passport.session());
 //STATIC FILES ACCESS
 app.use('/uploads', express.static('uploads'));
 
-//ADMIN ROUTER
+// ROUTER
 const adminRouter = require('./routers/admin/adminSignUpRouter');
-
-//VENDOR ROUTER
 const vendorRouter = require('./routers/vendor/vendorRouter');
-
-//USER ROUTER
 const userRouter = require('./routers/user/userRouter');
 const signInRouter = require('./routers/user/signInRouer');
 
@@ -36,18 +32,12 @@ const signInRouter = require('./routers/user/signInRouer');
 const authJWT = require('./middleware/authJWT');
 const verifySignUp = require('./middleware/verifySignUp');
 
-//AUDIO CHAT
-//setting up ejs
+//SETTING UP EJS
 app.set('view engine', 'ejs');
 
 // app.get('/:room', (req, res) => {
 //   res.render('room', { roomId: req.params.room });
 // });
-
-//Allow all origin
-// app.use(cors({
-//   origin: "*"
-// }));
 
 //VIDEO CHAT
 app.get('/video', (req, res) => {
@@ -57,14 +47,8 @@ app.get('/video', (req, res) => {
 });
 
 // Test route for google login 
-const isLoggedIn = (req, res, next) => {
-  req.user ? next() : res.send(401);
-}
-
-app.get('/', (req, res) => {
-  res.send('<a href=""auth/google>Authenticate user</a>')
-})
-
+const isLoggedIn = (req, res, next) => {req.user ? next() : res.send(401)}
+app.get('/', (req, res) => {res.send('<a href=""auth/google>Authenticate user</a>')})
 app.get('/google/authenticate', 
   passport.authenticate('google', 
     {
@@ -74,17 +58,9 @@ app.get('/google/authenticate',
   )
 )
 
-app.get('/login/failure', (req, res) => {
-  res.send('Something went wrong')
-})
-
-app.get('/login/success', isLoggedIn, (req, res) => {
-  res.send('Hello')
-})
-
-app.get('/logout', (req, res) => {
-  res.send('Goodbye');
-})
+app.get('/login/failure', (req, res) => {res.send('Something went wrong')})
+app.get('/login/success', isLoggedIn, (req, res) => {res.send('Hello')})
+app.get('/logout', (req, res) => {res.send('Goodbye')})
 
 //**********// ADMIN ROUTER //********** */
 app.use('/create/admin', adminRouter);
@@ -92,8 +68,6 @@ app.use('/delete/admin', adminRouter);
 app.use('/update/admin', adminRouter);
 app.use('/', adminRouter);
 app.use('/', adminRouter);
-
-
 
 //**********// VENDOR ROUTER //************** */
 app.use('/vendor/signup', vendorRouter);
@@ -104,14 +78,15 @@ app.use('/update/vendor', vendorRouter);
 app.use('/vendor', vendorRouter);
 
 //**********// USER ROUTER //************ */
-app.use('/create/user',
-  verifySignUp.chaeckDuplicateUsernameOrEmail,
-  userRouter);
+app.use('/create/user', verifySignUp.chaeckDuplicateUsernameOrEmail,userRouter);
 app.use('/get/user', userRouter);
-app.use('/update/user', userRouter);
+app.use('/get/single/', authJWT.verifyToken,userRouter);
+app.use('/upload/profile', authJWT.verifyToken, userRouter)
+app.use('/update/user', authJWT.verifyToken, userRouter);
 app.use('/delete/user', userRouter);
 app.use('/signin/user', signInRouter);
 app.use('/', signInRouter);
 app.use('/', userRouter);
+app.use('/send', userRouter)
 
 module.exports = app;

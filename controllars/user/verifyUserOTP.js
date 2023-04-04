@@ -1,10 +1,11 @@
-const ForgotPassModel = require('../../models/user/userForgotPassModel');
+const mailService = require('../../services/mail.services');
+const redisClient = require('../../config/redis-server');
 
 exports.checkUserOTP = async (req, res) => {
     try {
         const { userOTP } = req.body;
 
-        if (!userOTP) { return res.status(401).json({ message: 'Check your OTP' }) };
+        if (!userOTP) { return res.status(401).json({ message: 'Enter your OTP' }) };
 
         const userDetails = await ForgotPassModel.findOne({ OTP: userOTP });
 

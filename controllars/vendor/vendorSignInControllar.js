@@ -14,7 +14,7 @@ exports.vendorSignIn = async (req, res) => {
 
         if (!(email === vendor.email && matchedPassword)) res.status(401).json({ message: "Credential not matched" });
 
-        const token = jwt.sign({ email: vendor.email }, process.env.SECRET_ACCESS_KEY)
+        const token = jwt.sign({ id:vendor._id }, process.env.SECRET_ACCESS_KEY)
         res.status(200).json({
             status: 'login success',
             data: vendor,

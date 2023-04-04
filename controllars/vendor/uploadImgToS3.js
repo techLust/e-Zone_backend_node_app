@@ -1,19 +1,20 @@
-const AWS = require('aws-sdk');
-require('dotenv').config({path: '../../.env'});
 const { s3Uploader } = require('../../services/s3Uploader.services')
 
 exports.uploadImageToS3 = async (req, res) => {
-
     try{
         const {s3, params} = await s3Uploader(req.file);
         s3.upload(params, (err, data) => {
             if(data) console.log('Success from controller',data)
             else console.log(err)
-
         })
     }catch(err){
         console.log(err)
     }
+
+
+
+
+
     // try {
 
     //     const file = req.file;

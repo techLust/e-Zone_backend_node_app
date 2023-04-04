@@ -3,16 +3,16 @@ const mongoose = require('mongoose');
 //********// CREATE USERS SCHEMA //************* */
 
 const UserSchema = new mongoose.Schema({
-    firstName: {
+    fullName: {
         type: String,
         required: 'Please enter first name',
         trim: true,
     },
-    lastName: {
-        type: String,
-        required: "Please enter last name",
-        trim: true,
-    },
+    // lastName: {
+    //     type: String,
+    //     required: "Please enter last name",
+    //     trim: true,
+    // },
     email: {
         type: String,
         unique: true,
@@ -26,6 +26,10 @@ const UserSchema = new mongoose.Schema({
         required: 'Please enter password',
     },
     avatar: {
+        type: String,
+        default: 'https://thumbs.dreamstime.com/b/businessman-icon-vector-male-avatar-profile-image-profile-businessman-icon-vector-male-avatar-profile-image-182095609.jpg'
+    },
+    mobile: {
         type: String,
     }
 

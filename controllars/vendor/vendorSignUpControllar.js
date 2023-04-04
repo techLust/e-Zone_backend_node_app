@@ -7,22 +7,22 @@ const secretKey = process.env.SECRET_ACCESS_KEY;
 
 exports.createVendor = async(req, res) => {
     try{
-        const {firstName, lastName, email, password, role} = req.body;
-        if(!(firstName && lastName && email && password && role)) return res.status(401).json({message: 'Enter valid details'});
+        const {firstName, lastName, email, password} = req.body;
+        if(!(firstName && lastName && email && password)) return res.status(401).json({message: 'Enter valid details'});
 
         const salt = await bcrypt.genSalt(saltRounds);
         const hasshedPassword = await bcrypt.hash(password, salt);
 
-        const vendorData = new VendorSignUpModel({firstName, lastName, email, password: hasshedPassword, role});
+        const vendorData = new VendorSignUpModel({firstName, lastName, email, password: hasshedPassword});
         
         const token = jwt.sign({
-            email: vendorData.email,
+            id: vendorData._id,
         }, secretKey);
 
         await vendorData.save();
 
         res.status(200).json({
-            message:'success',
+            message:'Vendor sign up successful',
             data: vendorData,
             token: token,
         });

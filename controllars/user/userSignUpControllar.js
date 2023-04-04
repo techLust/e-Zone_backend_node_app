@@ -11,23 +11,20 @@ const secretKey = process.env.SECRET_ACCESS_KEY;
 exports.createUsers = async (req, res) => {
     try {
         //CHECKING DATA
-        const { firstName, lastName, email, password } = req.body;
+        const { fullName, email, password } = req.body;
 
-        if (!(firstName && lastName && email && password)) {
-            return res.send("Enter valid details");
-        }
+        if (!(fullName && email && password)) return res.status(501).json({message:"Enter valid details"});
 
         //ENCRYPTING PASSWORD
         const salt = await bcrypt.genSalt(saltRounds);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        const userData = new UserModel({ firstName, lastName, email, password: hashedPassword });
+        const userData = new UserModel({ fullName, email, password: hashedPassword });
 
         //CREATING JWT TOKEN
         const token = jwt.sign(
             {
-                email: userData.email,
-                password: userData.password,
+                id:userData._id,
             },
             secretKey,
             {
@@ -38,9 +35,9 @@ exports.createUsers = async (req, res) => {
         await userData.save();
 
         res.status(200).json({
-            status: 'Success',
+            status: 'User sign up successfull',
             data: {
-                User: userData,
+                userData,
             },
             token: token,
         });

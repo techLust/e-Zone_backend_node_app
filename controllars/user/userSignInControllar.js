@@ -12,13 +12,14 @@ exports.signIn = async (req, res) => {
         if (!password) return res.status(401).json({ message: "Password not found" });
 
         const user = await UserModel.findOne({ email: email });
-        if (email !== user.email) return res.status(401).json({ message: "unauthorized email/password" });
+        
+        if (email !== user.email) return res.status(401).json({ message: "unauthorized credentials" });
 
-        const isPasswordMatched = bcrypt.compare(password, user.password)
-        if (!isPasswordMatched) return res.status(401).json({ message: "unauthorized email/password" });
+        const isPasswordMatched = await bcrypt.compare(password, user.password)
+        if (!isPasswordMatched) return res.status(401).json({ message: "unauthorized credentials" });
 
         //GENERATION TOKEN
-        const token = jwt.sign({ email: user.email, password: user.password }, secretKey);
+        const token = jwt.sign({ id:user._id }, secretKey);
         res.status(200).json({
             message: "signin successful",
             token: token,
