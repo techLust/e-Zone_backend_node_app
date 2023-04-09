@@ -1,0 +1,30 @@
+version: 0.2
+env:
+  variables:
+    ECR_REPO_NAME: backend
+phases:
+  pre_build:
+    commands:
+      # Docker Hub Login
+      - echo ${DOCKERHUB_TOKEN} | docker login -u ${DOCKERHUB_USER} --password-stdin 
+      
+      # ECR Login
+      - ECR_MAIN_URI="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+      - aws ecr get-login-password --region ${AWS_REGION} | docker login -u AWS --password-stdin ${ECR_MAIN_URI}
+
+      - ECR_IMAGE_URI="${ECR_MAIN_URI}/${ECR_REPO_NAME}:latest"
+  build:
+    commands:
+      - docker build -t backend:latest .
+  post_build:
+    commands:
+      - docker tag backend:latest ${ECR_IMAGE_URI}
+      - docker push ${ECR_IMAGE_URI}
+
+     
+     # Generate image definitions file for ECS
+      - printf '[{"name":"backend","imageUri":"%s"}]' ${ECR_IMAGE_URI} > imagedefinitions.json
+
+artifacts:
+  files:
+    - imagedefinitions.json
