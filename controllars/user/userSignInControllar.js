@@ -9,29 +9,28 @@ exports.signIn = async (req, res) => {
         let { email, password } = req.body;
 
         if (!email) return res.status(401).json({
-            message: "Email not found",
+            message: "Please enter email",
             isError: true,
         });
         if (!password) return res.status(401).json({
-            message: "Password not found",
+            message: "Please enter password",
             isError: true,
         });
-
+        
         const user = await UserModel.findOne({ email: email });
-
+        
         if (!user) return res.status(500).json({
             message: "User not found",
             isError: true,
         })
 
-        if (email !== user.email) return res.status(401).json({
-            message: "unauthorized credentials",
-            isError: true,
-        });
+        // if (email !== user.email) return res.status(401).json({
+        //     message: "unauthorized credentials",
+        //     isError: true,
+        // });
 
         const isPasswordMatched = await bcrypt.compare(password, user.password);
 
-        
         if (!isPasswordMatched) return res.status(401).json({
             message: "unauthorized credentials",
             isError: true,
@@ -40,7 +39,7 @@ exports.signIn = async (req, res) => {
         password = null;
 
         //GENERATION TOKEN
-        const token = jwt.sign({ id: user._id }, secretKey);
+        const token = jwt.sign({ id: user._id }, secretKey, {} );
 
         res.status(200).json({
             message: "User signed in successful",

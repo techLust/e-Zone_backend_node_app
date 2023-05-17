@@ -16,9 +16,6 @@ exports.s3Uploader = async (file) => {
             ContentType: file.mimetype,
             ACL: 'public-read'
         };
-        // s3.upload(params, async (err, data) => {
-        //     if (data) console.log("From s3 uploader",data);
-        // })
        
         return {s3, params};
 

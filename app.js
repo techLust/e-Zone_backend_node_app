@@ -1,11 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const path = require('path');
-const { v4: uuidv4 } = require('uuid');
 const session = require('express-session');
-const passport = require('passport');
-const bodyParser = require("body-parser");
 
 //"express.json()" allows us to accept the data in json format from body.
 app.use(express.json());
@@ -16,8 +12,6 @@ app.use(express.urlencoded({ extended: true }));
 
 //SESSION
 app.use(session({secret: 'keyboard'})); //take secret form environment variable
-app.use(passport.initialize());
-app.use(passport.session());
 
 //STATIC FILES ACCESS
 app.use('/uploads', express.static('uploads'));
@@ -35,32 +29,6 @@ const verifySignUp = require('./middleware/verifySignUp');
 //SETTING UP EJS
 app.set('view engine', 'ejs');
 
-// app.get('/:room', (req, res) => {
-//   res.render('room', { roomId: req.params.room });
-// });
-
-//VIDEO CHAT
-app.get('/video', (req, res) => {
-  //rendering ejs file
-  // res.render(path.join(__dirname + '/views/room'))
-  res.redirect(`/${uuidv4()}`);
-});
-
-// Test route for google login 
-const isLoggedIn = (req, res, next) => {req.user ? next() : res.send(401)}
-app.get('/', (req, res) => {res.send('<a href=""auth/google>Authenticate user</a>')})
-app.get('/google/authenticate', 
-  passport.authenticate('google', 
-    {
-      successRedirect: '/login/success',
-      failureRedirect: '/login/failure',
-  }
-  )
-)
-
-app.get('/login/failure', (req, res) => {res.send('Something went wrong')})
-app.get('/login/success', isLoggedIn, (req, res) => {res.send('Hello')})
-app.get('/logout', (req, res) => {res.send('Goodbye')})
 
 //**********// ADMIN ROUTER //********** */
 app.use('/create/admin', adminRouter);
@@ -78,6 +46,8 @@ app.use('/update/vendor', vendorRouter);
 app.use('/vendor', vendorRouter);
 
 //**********// USER ROUTER //************ */
+app.use('/', signInRouter);
+app.use('/', userRouter);
 app.use('/create/user', verifySignUp.chaeckDuplicateUsernameOrEmail,userRouter);
 app.use('/get/user', userRouter);
 app.use('/get/single/', authJWT.verifyToken,userRouter);
@@ -85,8 +55,6 @@ app.use('/upload/profile', authJWT.verifyToken, userRouter)
 app.use('/update/user', authJWT.verifyToken, userRouter);
 app.use('/delete/user', userRouter);
 app.use('/signin/user', signInRouter);
-app.use('/', signInRouter);
-app.use('/', userRouter);
 app.use('/send', userRouter)
 
 module.exports = app;

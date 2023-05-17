@@ -14,16 +14,12 @@ exports.sendMail = (email, subject, messageContent) => {
             from: 'mahatabhossain262@gmail.com',
             to: email,
             subject: subject,
-            // text: `Hey there, whats going on. I will join you shortly <p>OTP</p> `,
             html: messageContent,
-
         };
 
-        mailTransporter.sendMail(mailDetails, err => {
-            if (err) console.log(err)
-        });
+        mailTransporter.sendMail(mailDetails, err => { if (err) console.log(err) });
+
     } catch (err) {
-        console.log(err)
         return err.message;
     }
 };
