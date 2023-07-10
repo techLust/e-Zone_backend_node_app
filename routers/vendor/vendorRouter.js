@@ -7,9 +7,7 @@ const updateVendorControllar = require('../../controllars/vendor/updateVendorCon
 const forgotVendorPasswordController = require('../../controllars/vendor/vendorForgotPasswordController');
 const addProductController = require('../../controllars/vendor/addProductController');
 const { uploadImage } = require('../../middleware/uploadImage');
-const uploadImageController = require('../../controllars/user/uploadImgController');
-const { uploadImageToS3 } = require('../../controllars/vendor/uploadImgToS3');
-const { getProducts } = require('../../controllars/vendor/getProductController');
+const { getProducts, getProductById } = require('../../controllars/vendor/getProductController');
 
 router.route('/').post(vendorSignUpControllar.createVendor);
 router.route('/vendor/signin').post(vendorSignInControllar.vendorSignIn);
@@ -20,5 +18,6 @@ router.route('/:id').get(getVendorControllar.getVendorDetailsById);
 router.route('/vendor/forgot/password').get(forgotVendorPasswordController.checkVendorEmail);
 router.route('/add/product').post(uploadImage,addProductController.addProduct);
 router.route('/get/product').get(getProducts)
+router.route('/get/product/:id').get(getProductById)
 
 module.exports = router;

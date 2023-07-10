@@ -1,7 +1,8 @@
 const express = require('express');
-const cors = require('cors');
 const app = express();
+const cors = require('cors');
 const session = require('express-session');
+const cookieParser = require('cookie-parser')
 
 //"express.json()" allows us to accept the data in json format from body.
 app.use(express.json());
@@ -9,12 +10,15 @@ app.use(express.json());
 app.use(cors());
 // Parses incoming request with url encoded payloads based on body parser.
 app.use(express.urlencoded({ extended: true }));
-
 //SESSION
 app.use(session({secret: 'keyboard'})); //take secret form environment variable
-
+//Cookie
+app.use(cookieParser());
 //STATIC FILES ACCESS
 app.use('/uploads', express.static('uploads'));
+//SETTING UP EJS
+app.set('view engine', 'ejs');
+
 
 // ROUTER
 const adminRouter = require('./routers/admin/adminSignUpRouter');
@@ -25,10 +29,6 @@ const signInRouter = require('./routers/user/signInRouer');
 //MIDDLEWARE
 const authJWT = require('./middleware/authJWT');
 const verifySignUp = require('./middleware/verifySignUp');
-
-//SETTING UP EJS
-app.set('view engine', 'ejs');
-
 
 //**********// ADMIN ROUTER //********** */
 app.use('/create/admin', adminRouter);
@@ -41,7 +41,6 @@ app.use('/', adminRouter);
 app.use('/vendor/signup', vendorRouter);
 app.use('/', vendorRouter);
 app.use('/delete/vendor', vendorRouter);
-app.use('/', vendorRouter);
 app.use('/update/vendor', vendorRouter);
 app.use('/vendor', vendorRouter);
 

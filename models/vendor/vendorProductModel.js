@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const vendorProductSchema = new mongoose.Schema({
+    userId: {
+        type: String,
+        required: true,
+    },
     productName: {
         type: String,
         // required: true,
@@ -13,17 +17,17 @@ const vendorProductSchema = new mongoose.Schema({
         type: String,
         // required: true,
     },
-    assetId: {
+    productCategory: {
         type: String,
         // required: true,
     },
-    filename: {
+    productFreshnes: {
         type: String,
-        // required: true
+        // required: true,
     },
-    format: {
+    productComment: {
         type: String,
-        // required: true
+        // required: true,
     },
     url: {
         type: String,

@@ -8,4 +8,4 @@ const Storage = multer.diskStorage({
     },
 });
 
-exports.uploadImage = multer({ storage: Storage }).single('image');
+exports.uploadImage = multer({ storage: Storage }).single('productImage');
