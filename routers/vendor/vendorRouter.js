@@ -8,6 +8,7 @@ const forgotVendorPasswordController = require('../../controllars/vendor/vendorF
 const addProductController = require('../../controllars/vendor/addProductController');
 const { uploadImage } = require('../../middleware/uploadImage');
 const { getProducts, getProductById } = require('../../controllars/vendor/getProductController');
+const { addProductToCart, getCartProduct } = require('../../controllars/user/addCartControllar');
 
 router.route('/').post(vendorSignUpControllar.createVendor);
 router.route('/vendor/signin').post(vendorSignInControllar.vendorSignIn);
@@ -19,5 +20,7 @@ router.route('/vendor/forgot/password').get(forgotVendorPasswordController.check
 router.route('/add/product').post(uploadImage,addProductController.addProduct);
 router.route('/get/product').get(getProducts)
 router.route('/get/product/:id').get(getProductById)
+router.route('/add/cart/').post(addProductToCart)
+router.route('/get/cart/:id').get(getCartProduct)
 
 module.exports = router;
