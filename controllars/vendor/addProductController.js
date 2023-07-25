@@ -23,4 +23,8 @@ const { s3Uploader } = require('../../services/s3Uploader.services');
         }catch(err){
             return res.status(500).json({status: 'Product added failed'})
         }
+        finally {
+            //delete file after upload successfully
+            console.log("Finally executed")
+        }
     }

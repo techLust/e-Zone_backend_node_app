@@ -31,7 +31,7 @@ const UserSchema = new mongoose.Schema(
     cart: {
       type: Array,
       // of:
-      default: [{amount: 1 }],
+      default: [],
     },
   },
   {

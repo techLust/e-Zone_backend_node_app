@@ -4,7 +4,7 @@ const { vendorProductModel } = require("../models/vendor/vendorProductModel");
 
 exports.s3Uploader = async (file, body, userId) => {
   try {
-    console.log("FILE", file, "ID", userId );
+    console.log("FILE", file, "ID", userId);
     const fileStream = fs.createReadStream(file.path);
 
     const {
