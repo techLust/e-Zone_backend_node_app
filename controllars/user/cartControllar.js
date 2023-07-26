@@ -27,9 +27,7 @@ exports.addProductToCart = async (req, res) => {
         });
         console.log("Product added to cart");
         userDetails.save();
-        return res
-          .status(200)
-          .json({ status: "Product added to cart", userDetails });
+        return res.status(200).json({ status: "Product added to cart", userDetails });
       }
     } else {
       return res.json({ status: "Failed to add product in cart" });
@@ -90,9 +88,7 @@ exports.deleteItem = async (req, res) => {
       userDetails.cart = items;
       userDetails.save();
     }
-    return res
-      .status(200)
-      .json({ status: "Product deleted successfully", userDetails });
+    return res.status(200).json({ status: "Product deleted successfully", userDetails });
   } catch (e) {
     console.log(e);
     return res.status(500).json({ status: "Failed to delete" });

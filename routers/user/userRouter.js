@@ -12,6 +12,7 @@ const { getSingleUserData } = require('../../controllars/user/getSingleUser')
 const { sendOTOP } = require('../../helper/otpSender')
 const { uploadProfileImage } = require('../../controllars/user/uploadProfileImageController');
 
+
 router.route("/")
     .post(signUpControllar.createUsers)
     .get(getUserControllar.getUser)
@@ -29,6 +30,7 @@ router.route('/image').post(uploadImage,uploadProfileImage);
 router.route('/update/password').patch(updateUserPassControllar.updateUserPass);
 router.route('/upload/image').post(uploadImage, uploadUserImage.uploadImage);
 router.route('/user').get(getSingleUserData);
-
+router.route('/add/user/address/:id').post(signUpControllar.addAddress)
+router.route('/get/user/address/:id').get(signUpControllar.getAddress)
 
 module.exports = router;

@@ -5,8 +5,8 @@ const jwt = require("jsonwebtoken");
 const saltRounds = 8;
 const secretKey = process.env.SECRET_ACCESS_KEY;
 
-//************// USER SIGN UP SERVICE //***************/
 
+//************// USER SIGN UP SERVICE //***************/
 exports.createUsers = async (req, res) => {
   try {
     //CHECKING DATA
@@ -55,3 +55,38 @@ exports.createUsers = async (req, res) => {
     });
   }
 };
+
+
+//************// ADD ADDRESS SERVICE //***************/
+
+exports.addAddress = async (req, res) => {
+  try{
+    const userId = req.params.id
+    const userAddress = req.body
+    console.log(userId, userAddress)
+
+    const userDetails = await UserModel.findById(userId)
+    userDetails.address.push(userAddress)
+    userDetails.save()
+    return res.status(200).json({status: 'Address save successfull', userDetails})
+  }catch(e) {
+    console.log(e)
+    return res.status(500).json({status: 'Failed to save address', error: e.message})
+
+  }
+}
+
+exports.getAddress = async (req, res) => {
+  try{
+    const userId = req.params.id
+    const { address } = await UserModel.findById(userId)
+    console.log(address)
+    return res.status(200).json({status: 'Address fetched successfull', address})
+
+  }catch(e){
+    console.log(e)
+    return res.status(500).json({status: 'Failed to save address', error: e.message})
+
+  }
+}
+

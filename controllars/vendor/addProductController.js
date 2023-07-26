@@ -2,9 +2,6 @@ require('dotenv').config({path: '../../.env'});
 const { s3Uploader } = require('../../services/s3Uploader.services');
 
     exports.addProduct = async (req, res) => {
-        console.log("BODY", req.body)
-        console.log("HEADER", req.headers.token)
-
         try{        
             //Decode token
             const token = req.headers.token
@@ -16,11 +13,10 @@ const { s3Uploader } = require('../../services/s3Uploader.services');
             console.log("DECODED TOKEN", payload)
 
             await s3Uploader(req.file, req.body, payload.id);
-            return res.status(200).json({
-                status: 'Product added successful',
-            })
+            return res.status(200).json({ status: 'Product added successful'})
     
-        }catch(err){
+        }catch(e){
+            console.log(e)
             return res.status(500).json({status: 'Product added failed'})
         }
         finally {
