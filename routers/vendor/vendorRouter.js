@@ -36,7 +36,7 @@ router.route("/add/cart/").post(addProductToCart);
 router.route("/get/cart/:id").get(getCartProducts);
 router.route("/clear/cart/:id").delete(deleteAllItem);
 router.route("/delete/item").delete(deleteItem);
-router.route("/increase/item").delete(increaseQuantity);
-router.route("/decrease/item").delete(decreaseQuantity);
+router.route("/increase/item").post(increaseQuantity);
+router.route("/decrease/item").post(decreaseQuantity);
 
 module.exports = router;

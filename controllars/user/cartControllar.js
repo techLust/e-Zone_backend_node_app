@@ -87,7 +87,7 @@ exports.deleteItem = async (req, res) => {
       const items = userDetails.cart.filter(
         (el) => !(el.productId === productId && el.userId === userId)
       );
-      const deleteItem = userDetails.cart = items
+      userDetails.cart = items;
       userDetails.save();
     }
     return res
@@ -101,26 +101,42 @@ exports.deleteItem = async (req, res) => {
 
 exports.increaseQuantity = async (req, res) => {
   try {
-    const userId = req.params.id;
-    console.log("Item quantiry increased");
+    const { userId, productId } = req.query;
+    console.log("Item quantiry increased", userId, productId);
     const userDetails = await UserModel.findById(userId);
-    const cartItem = userDetails.cart;
-    return res.status(200).json({ status: "Item incresed" });
+    const itemIndex = userDetails.cart.findIndex(el => el?.userId === userId && el?.productId === productId);
+    console.log(itemIndex);
+    userDetails.cart[itemIndex].amount += 1;
+    userDetails.markModified('cart');
+    userDetails.save((err, data) => {
+      if(err) console.log(err)
+      else console.log("UPDATED DATA", data)
+    });
+
+    return res.status(200).json({ status: "Item incresed", userDetails });
   } catch (e) {
-    console.log("Failed to increase quantiry");
+    console.log("Failed to increase quantiry", e);
     return res.status(500).json({ status: "Failed to increased" });
   }
 };
 
 exports.decreaseQuantity = async (req, res) => {
   try {
-    console.log("Item quantiry decreased");
-    const userId = req.params.id;
+    const { userId, productId } = req.query;
+    console.log("Item quantiry increased", userId, productId);
     const userDetails = await UserModel.findById(userId);
-    const cartItem = userDetails.cart;
-    return res.status(200).json({ status: "Item decresed" });
+    const itemIndex = userDetails.cart.findIndex(el => el?.userId === userId && el?.productId === productId);
+    console.log(itemIndex);
+    userDetails.cart[itemIndex].amount -= 1;
+    userDetails.markModified('cart');
+    userDetails.save((err, data) => {
+      if(err) console.log(err)
+      else console.log("UPDATED DATA", data)
+    });
+
+    return res.status(200).json({ status: "Item incresed", userDetails });
   } catch (e) {
-    console.log("Failed to decrease quantiry");
-    return res.status(500).json({ status: "Failed to decreased" });
+    console.log("Failed to increase quantiry", e);
+    return res.status(500).json({ status: "Failed to increased" });
   }
 };
