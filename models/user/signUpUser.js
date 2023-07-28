@@ -33,14 +33,14 @@ const UserSchema = new mongoose.Schema(
       // of:
       default: [],
     },
-    // address: {
-    //   type: Map, //for objects
-    //   default: {}
-    // }
     address: {
       type: Array, //for objects
       default: []
-    }
+    },
+    // orders: {
+    //   type: Map, //for objects
+    //     default: {}
+    // },
   },
   {
     timestamps: true,
