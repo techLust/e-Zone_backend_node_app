@@ -119,10 +119,8 @@ exports.increaseQuantity = async (req, res) => {
 exports.decreaseQuantity = async (req, res) => {
   try {
     const { userId, productId } = req.query;
-    console.log("Item quantiry increased", userId, productId);
     const userDetails = await UserModel.findById(userId);
     const itemIndex = userDetails.cart.findIndex(el => el?.userId === userId && el?.productId === productId);
-    console.log(itemIndex);
     userDetails.cart[itemIndex].amount -= 1;
     userDetails.markModified('cart');
     userDetails.save((err, data) => {
