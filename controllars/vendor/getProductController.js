@@ -28,6 +28,7 @@ exports.getProductById = async (req, res) => {
   try {
     const productId = req.params.id;
     const product = await vendorProductModel.findById(productId);
+    // console.log('PRODUCT', product)
     if (!product) {
       return res.status(500).json({ status: "Product fetched failed" });
     }

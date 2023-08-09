@@ -11,7 +11,7 @@ const { uploadImage } = require('../../middleware/uploadImage');
 const { getSingleUserData } = require('../../controllars/user/getSingleUser')
 const { sendOTOP } = require('../../helper/otpSender')
 const { uploadProfileImage } = require('../../controllars/user/uploadProfileImageController');
-const { placeOrder } = require('../../controllars/user/orderControllar');
+const { placeOrder, makePayment, capturePayment } = require('../../controllars/user/orderControllar');
 
 
 router.route("/")
@@ -33,6 +33,8 @@ router.route('/upload/image').post(uploadImage, uploadUserImage.uploadImage);
 router.route('/user').get(getSingleUserData);
 router.route('/add/user/address/:id').post(signUpControllar.addAddress)
 router.route('/get/user/address/:id').get(signUpControllar.getAddress)
-router.route('/place/order/:id').post(placeOrder)
+router.route('/create/order').get(makePayment)
+// router.route('/place/order/:userId').post(placeOrder)
+router.route('/capture/payment/:paymentId').post(placeOrder)
 
 module.exports = router;

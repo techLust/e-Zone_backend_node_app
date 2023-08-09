@@ -32,6 +32,10 @@ const vendorProductSchema = new mongoose.Schema({
     url: {
         type: String,
         // required: true
+    },
+    quantity: {
+        type: Number,
+        default: 1
     }
 }, {
     timestamps: true

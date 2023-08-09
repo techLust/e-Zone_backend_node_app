@@ -14,6 +14,7 @@ exports.s3Uploader = async (file, body, userId) => {
       productDescription,
       productPrice,
       productComments,
+      quantity,
     } = body;
 
     const s3 = new AWS.S3({
@@ -40,6 +41,7 @@ exports.s3Uploader = async (file, body, userId) => {
           productPrice,
           productComments,
           url: data.Location,
+          quantity: quantity
         });
         console.log(product);
       } else console.log(err);

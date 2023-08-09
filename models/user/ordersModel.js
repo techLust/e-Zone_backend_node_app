@@ -9,7 +9,7 @@ const orderSchema = mongoose.Schema({
         type: Array,
     },
    paymentHistory: {
-    type: Array
+    type: Map
     },
     address: {
         type: Map
