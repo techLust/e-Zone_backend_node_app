@@ -50,7 +50,7 @@ app.use('/', userRouter);
 app.use('/create/user', verifySignUp.chaeckDuplicateUsernameOrEmail,userRouter);
 app.use('/get/user', userRouter);
 app.use('/get/single/', authJWT.verifyToken,userRouter);
-app.use('/upload/profile', authJWT.verifyToken, userRouter)
+app.use('/upload/', authJWT.verifyToken, userRouter)
 app.use('/update/user', authJWT.verifyToken, userRouter);
 app.use('/delete/user', userRouter);
 app.use('/signin/user', signInRouter);

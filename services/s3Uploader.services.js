@@ -2,20 +2,28 @@ const AWS = require("aws-sdk");
 const fs = require("fs");
 const { vendorProductModel } = require("../models/vendor/vendorProductModel");
 
-exports.s3Uploader = async (file, body, userId) => {
+exports.s3Uploader = async (file, body = null, userId = null) => {
   try {
     console.log("FILE", file, "ID", userId);
     const fileStream = fs.createReadStream(file.path);
 
-    const {
-      productName,
-      productCategory,
-      productFreshness,
-      productDescription,
-      productPrice,
-      productComments,
-      quantity,
-    } = body;
+      let productName
+      let productCategory
+      let productFreshness
+      let productDescription
+      let productPrice
+      let productComments
+      let quantity
+
+      if(body){
+        productName = body.productName
+        productCategory = body.productCategory
+        productFreshness = body.productFreshness
+        productDescription = body.productDescription
+        productPrice = body.productPrice
+        productComments = body.productComments
+        quantity = body.quantity
+      }
 
     const s3 = new AWS.S3({
       accessKeyId: process.env.S3_ACCESS_KEY_ID,
@@ -30,6 +38,7 @@ exports.s3Uploader = async (file, body, userId) => {
       ACL: "public-read",
     };
 
+    if(body){
     s3.upload(params, async (err, data) => {
       if (data) {
         const product = await vendorProductModel.create({
@@ -47,6 +56,7 @@ exports.s3Uploader = async (file, body, userId) => {
       } else console.log(err);
     });
 
+  }
     return { s3, params };
   } catch (error) {
     console.log(error);

@@ -1,14 +1,13 @@
+const Razorpay = require('razorpay')
 const { OrderModel } = require('../../models/user/ordersModel')
 const UserModel = require('../../models/user/signUpUser')
-const Razorpay = require('razorpay')
 
 exports.placeOrder = async (req, res) => {
     try {
         console.log("Place order API called")
         const userId = req.params.userId
-        const { price } = req.body
-        
-        let paymentDetails
+        const price = req.body
+        const productPrice = Object.keys(price)
 
         console.log(userId, price)
 
@@ -23,40 +22,37 @@ exports.placeOrder = async (req, res) => {
         });
 
         const options = {
-            amount: price, 
+            amount: productPrice[0] * 100,
             currency: "INR",
             receipt: "receipt#1",
             payment_capture: 0,
         };
 
-        razorpayInstance.orders.create(options, (err, order) => {
+        razorpayInstance.orders.create(options, async (err, order) => {
             if (err) {
                 return res.status(500).json({
                     message: "Something Went Wrong",
                 });
             }
-            // return res.status(200).json(order);
-            paymentDetails = order
-        });
 
-
-        if (userDetails) {
-            const orderDetails = new OrderModel({
+            const orderDetails = await OrderModel({
                 userId: userDetails._id,
                 orderedItem: userDetails.cart,
-                paymentHistory: '',
-                address: userDetails.address[0]
+                paymentHistory: order,
+                address: userDetails.address[0],
             })
 
-            // orderDetails.save()
-            console.log('Place order successful', orderDetails, "ORDERS", paymentDetails)
+            orderDetails.save()
+            console.log('Place order successful', orderDetails)
+            console.log('PAYMENT DETAILS', order)
             return res.status(200).json({ status: 'Your order placed successful', orderDetails })
-        }
+        });
     } catch (e) {
         console.log(e)
         return res.status(500).json({ status: 'Something went wrong', e })
     }
 }
+
 
 const razorpayInstance = new Razorpay({
     // Replace with your key_id
@@ -65,13 +61,14 @@ const razorpayInstance = new Razorpay({
     key_secret: process.env.secretKey
 });
 
-
 exports.makePayment = (req, res) => {
     try {
-        console.log("Make payment API called")
+        const price = req.body
+        const productPrice = Object.keys(price)
+        console.log("Make payment API called", price)
         // res.render('payment.ejs', {error: false});
         const options = {
-            amount: 10 * 100, // amount == Rs 10
+            amount: 100,
             currency: "INR",
             receipt: "receipt#1",
             payment_capture: 0,
