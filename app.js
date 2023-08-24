@@ -16,6 +16,7 @@ app.use(session({secret: 'keyboard'})); //take secret form environment variable
 app.use(cookieParser());
 //STATIC FILES ACCESS
 app.use('/uploads', express.static('uploads'));
+app.use('/public', express.static('public'))
 //SETTING UP EJS
 app.set('view engine', 'ejs');
 

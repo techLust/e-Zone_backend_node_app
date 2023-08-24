@@ -120,3 +120,16 @@ exports.makePayment = (req, res) => {
 //         });
 //     }
 // };
+
+exports.getAllOrders = async (req, res) => {
+    try{
+        console.log('get all order called')
+        const { userId } = req.params
+        console.log(userId)
+        const orders = await OrderModel.find({ 'userId': userId})
+        console.log(orders)
+        return res.status(200).json({'status': 'success', orders})
+    }catch(e){
+        console.log(e)
+    }
+}

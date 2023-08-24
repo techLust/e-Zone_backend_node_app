@@ -15,10 +15,10 @@ exports.verifyToken = (req, res, next) => {
         if(err) return res.status(403).json({message: "Invalid token"});
         const userDetails = await UserModel.findById(decode.id);
         req.user = userDetails;
-        console.log("From AUTH", req.user)
+        // console.log("From AUTH", req.user)
         next();
     });
 }catch(err){
-    console.log('AUTH #########################################################',err)
+    console.log(err)
 }
 };

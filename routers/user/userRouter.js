@@ -11,8 +11,13 @@ const { uploadImage } = require('../../middleware/uploadImage');
 const { getSingleUserData } = require('../../controllars/user/getSingleUser')
 const { sendOTOP } = require('../../helper/otpSender')
 const { uploadProfileImage } = require('../../controllars/user/uploadProfileImageController');
-const { placeOrder, makePayment, capturePayment } = require('../../controllars/user/orderControllar');
+const { placeOrder,
+    makePayment,
+    capturePayment,
+    getAllOrders } = require('../../controllars/user/orderControllar');
+
 const { chatWithUs } = require('../../controllars/user/chatControllars');
+const { createInvoice } = require('../../controllars/user/invoiceControllar');
 
 
 router.route("/")
@@ -33,9 +38,11 @@ router.route('/upload/image').post(uploadImage, uploadImageToCloudinary);
 router.route('/user').get(getSingleUserData);
 router.route('/add/user/address/:id').post(signUpControllar.addAddress)
 router.route('/get/user/address/:id').get(signUpControllar.getAddress)
-router.route('/create/order').get(makePayment)
-// router.route('/place/order/:userId').post(placeOrder)
-router.route('/capture/payment/:paymentId').post(placeOrder)
+// router.route('/create/order').get(makePayment)
+router.route('/place/order/:userId').post(placeOrder)
+// router.route('/capture/payment/:paymentId').post(placeOrder)
 router.route('/chat/with/us').post(chatWithUs)
+router.route('/get/all/orders/:userId').get(getAllOrders)
+router.post('/create/invoice/:orderId', createInvoice)
 
 module.exports = router;
