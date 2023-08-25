@@ -18,6 +18,7 @@ const { placeOrder,
 
 const { chatWithUs } = require('../../controllars/user/chatControllars');
 const { createInvoice } = require('../../controllars/user/invoiceControllar');
+const { getAllPayments } = require('../../controllars/user/paymentControllar');
 
 
 router.route("/")
@@ -44,5 +45,6 @@ router.route('/place/order/:userId').post(placeOrder)
 router.route('/chat/with/us').post(chatWithUs)
 router.route('/get/all/orders/:userId').get(getAllOrders)
 router.post('/create/invoice/:orderId', createInvoice)
+router.get('/get/payments/:userId', getAllPayments)
 
 module.exports = router;

@@ -4,10 +4,7 @@ exports.chatWithUs = async (req, res) => {
   try {
     const { userId, message } = req.body
 
-    const chatDetails = await ChatModel({
-      userId: userId,
-      chat: message
-    })
+    const chatDetails = await ChatModel({ userId: userId, chat: message })
     await chatDetails.save()
     res.status(200).json({ status: 'Message sent', chatDetails })
 
