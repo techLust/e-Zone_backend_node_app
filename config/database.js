@@ -1,13 +1,11 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv').config();
 
-const MONGO_URI = process.env.MONGO_URI;
-
-mongoose.connect(MONGO_URI,{
+mongoose.connect(process.env.MONGO_URI,{
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    user: 'Mahatab',
-    pass: '123',
+    user: process.env.MONGO_USERNAME,
+    pass: process.env.MONGO_PASSWORD,
     authSource: 'admin'
 })
 .then(() => console.log('MongoDB database connected'))

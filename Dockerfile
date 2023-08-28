@@ -1,31 +1,24 @@
-# The FROM instruction defines a base image and version to create this new image from
-FROM node:16
+FROM node:18-alpine
+# Creating a node user
 
-# Make directory
-RUN mkdir -p /app
+RUN apk upgrade --update-cache --available && \
+    apk add openssl && \
+    apk add git && \
+    rm -rf /var/cache/apk/*
+RUN openssl version
+RUN node --version
 
-# The RUN command perform a task run by the container shell in the background
-WORKDIR /app
-
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
-
-# Install packeges using NPM or "ci" it install exact same dependency
-RUN npm i
-
-# If you are building your code for production
-# RUN npm ci --only=production
-
-#Copy entire app from source to destination
-# Bundle app source
-COPY . .
-
-ENV MONGO_URI=mongodb://172.17.0.1:27017/e-com-db 
-
-# The EXPOSE instruction defines a network port that the docker container should listen on when run
-EXPOSE 3000
-
-# Run the "npm start" command to see the app on browser
-CMD ["npm", "start"] 
+RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
+WORKDIR /home/node/app
+COPY ./package.json ./
+# USER appuser
+USER node
+RUN npm install;    
+# COPY ./s3.js ./node_modules/s3-proxy/lib/s3.js
+USER root
+RUN apk del git
+USER node
+COPY --chown=node:node . ./
+# COPY . ./
+EXPOSE 9000
+CMD ["npm","run","dev"]
