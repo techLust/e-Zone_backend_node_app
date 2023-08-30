@@ -1,0 +1,43 @@
+version: "3"
+services:
+  redis-server: 
+    image: 'redis'
+    container_name: e-zone-radis
+    restart: always
+    expose:
+      - '6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_PORT_NUMBER=6379
+  nodeapp:
+    container_name: e-zone-backend
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    ports:
+      - "4000:4000"
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+    environment:
+      WAIT_HOSTS: mongodb:27017
+    networks:
+      - node-webapp-network
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    
+    environment:
+      - MONGO_URI=mongodb://172.17.0.1:27017/e-ZoneDB
+      - MONGO_USERNAME='Mahatab'
+      - MONGO_PASSWORD='123'
+    networks:
+      - node-webapp-network
+networks:
+  node-webapp-network:
+    driver: bridge

@@ -2,7 +2,7 @@ const Redis = require('redis')
 
 //Pass URL endpoint for production in "createClient()"
 const redisClient = Redis.createClient({
-    host: 'localhost',
+    host: '172.17.0.1',
     port: 6379,
 })
 redisClient.connect();
