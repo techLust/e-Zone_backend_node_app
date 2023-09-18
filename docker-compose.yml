@@ -19,19 +19,18 @@ services:
     env_file: .env
     ports:
       - "4000:4000"
-    links:
-      - mongodb
-    depends_on:
-      - mongodb
-    environment:
-      WAIT_HOSTS: mongodb:27017
-    networks:
-      - node-webapp-network
+    # links:
+    #   - mongodb
+    # depends_on:
+    #   - mongodb
+    # environment:
+    #   WAIT_HOSTS: mongodb:27017
+    # networks:
+    #   - node-webapp-network
   mongodb:
     image: mongo
     ports:
       - "27017:27017"
-    
     environment:
       - MONGO_URI=mongodb://172.17.0.1:27017/e-ZoneDB
       - MONGO_USERNAME='Mahatab'
